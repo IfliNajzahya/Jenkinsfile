@@ -17,7 +17,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Mulai build aplikasi'
-                sh 'echo "Build selesai ✅"'
+                bat 'echo "Build selesai ✅"'
             }
         }
         stage('Build Docker Image') {

@@ -21,12 +21,12 @@ pipeline {
             }
         }
 	stage('Database Integration Test') {
-    steps {
-        bat '"%DOCKER%" compose version'
-        bat 'C:\\Users\\iflin\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe compose exec -T app python -c "import mysql.connector; c=mysql.connector.connect(host=\'db\', user=\'root\', password=\'\', database=\'simpleapp\'); print(\'DATABASE CONNECTED:\', c.database); c.close()"'
+    		steps {
+       		 bat '"C:\\Users\\iflin\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker-compose.exe" -f "%WORKSPACE%\\docker-compose.yml" up --build -d'
+
+        	bat '"C:\\Users\\iflin\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker-compose.exe" -f "%WORKSPACE%\\docker-compose.yml" exec -T app python -c "import mysql.connector; c=mysql.connector.connect(host=\'db\', user=\'root\', password=\'\', database=\'simpleapp\'); print(\'DATABASE CONNECTED:\', c.database); c.close()"'
     }
-}
-        stage('Build Docker Image') {
+}        stage('Build Docker Image') {
             steps {
                 bat '"%DOCKER%" build -t %IMAGE_NAME%:%BUILD_NUMBER% .'
             }

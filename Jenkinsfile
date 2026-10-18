@@ -22,7 +22,7 @@ pipeline {
         }
 	stage('Database Integration Test') {
     steps {
-        bat 'C:\\Users\\iflin\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe compose up --build -d'
+        bat '"%DOCKER%" compose version'
         bat 'C:\\Users\\iflin\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe compose exec -T app python -c "import mysql.connector; c=mysql.connector.connect(host=\'db\', user=\'root\', password=\'\', database=\'simpleapp\'); print(\'DATABASE CONNECTED:\', c.database); c.close()"'
     }
 }

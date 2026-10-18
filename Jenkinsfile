@@ -4,6 +4,7 @@ pipeline {
 
     environment {
         DOCKER = 'C:\\Users\\iflin\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe'
+        COMPOSE = 'C:\\Users\\iflin\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker-compose.exe'
         IMAGE_NAME = 'iflinajzahya/simple-app'
         REGISTRY_CREDENTIALS = 'dockerhub-credentials'
     }
@@ -20,15 +21,17 @@ pipeline {
                 bat 'echo "Build di Windows"'
             }
         }
-	stage('Database Integration Test') {
-    		steps {
-       		 bat '"C:\\Users\\iflin\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker-compose.exe" -f "%WORKSPACE%\\docker-compose.yml" up --build -d'
 
-        	bat '"C:\\Users\\iflin\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker-compose.exe" -f "%WORKSPACE%\\docker-compose.yml" exec -T app python -c "import mysql.connector; c=mysql.connector.connect(host=\'db\', user=\'root\', password=\'\', database=\'simpleapp\'); print(\'DATABASE CONNECTED:\', c.database); c.close()"'
-    }
-}        stage('Build Docker Image') {
+        stage('Build Docker Image') {
             steps {
                 bat '"%DOCKER%" build -t %IMAGE_NAME%:%BUILD_NUMBER% .'
+            }
+        }
+
+        stage('Database Integration Test') {
+            steps {
+                bat '"%COMPOSE%" -f "%WORKSPACE%\\docker-compose.yml" up --build -d'
+                bat '"%COMPOSE%" -f "%WORKSPACE%\\docker-compose.yml" exec -T app python -c "import mysql.connector; c=mysql.connector.connect(host=\'db\', user=\'root\', password=\'\', database=\'simpleapp\'); print(\'DATABASE CONNECTED:\', c.database); c.close()"'
             }
         }
 
